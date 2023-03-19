@@ -1,0 +1,633 @@
+openapi: 3.0.3
+info:
+  title: IITM Portal Assist - OpenAPI 3.0
+  version: 1.0.11
+  description: >-
+    This Application aids in resolving the queries of IITM onlinedegree students
+    in a more oraganised manner.
+
+    This is a project under development for the educational purpose done by
+
+    HRITHICK SUNDAR J (21f1000194@ds.study.iitm.ac.in) and
+    YUVRAAJ(21f1004566@ds.study.iitm.ac.in)
+  contact:
+    email: 21f1000194@ds.study.iitm.ac.in
+    name: Wings of freedom
+servers:
+  - url: 127.0 0.1
+    variables: {}
+paths:
+  /user:
+    post:
+      tags:
+        - User
+      summary: Adds the user
+      description: To add a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: Hrithick Yuvaraj
+                userid:
+                  type: number
+                  example: 1
+                role:
+                  type: string
+                  default: student
+                  enum:
+                    - student
+                    - support
+                    - admin
+                password:
+                  type: string
+      operationId: createUser
+      responses:
+        default:
+          description: Default error sample response
+  /user/login:
+    get:
+      tags:
+        - User
+      summary: Logs user into the system
+      description: logs in
+      operationId: loginUser
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid username/password supplied
+  /user/logout:
+    get:
+      tags:
+        - User
+      summary: Logs out current logged in user session
+      description: ''
+      operationId: logoutUser
+      parameters: []
+      responses:
+        default:
+          description: successful operation
+  /user/{userid}:
+    get:
+      tags:
+        - User
+      summary: Get user by user id
+      description: ''
+      operationId: getUserById
+      parameters:
+        - name: userid
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    example: Hrithick Yuvaraj
+                  userid:
+                    type: number
+                    example: 1
+                  userrole:
+                    type: string
+                    example: student
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    delete:
+      tags:
+        - User
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+        - name: userid
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      summary: Edit user details
+      description: ''
+      parameters:
+        - name: userid
+          in: path
+          description: 'The name that needs to be fetched '
+          required: true
+          schema:
+            type: string
+      operationId: editUser
+      responses:
+        default:
+          description: Default error sample response
+  /ticket:
+    description: the ticket 's path
+    get:
+      tags:
+        - Ticket
+      summary: Gets all the tickets
+      description: ''
+      operationId: getTickets
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userid:
+                    type: number
+                    example: 1
+                  ticketid:
+                    type: number
+                    example: 3
+                  created_date:
+                    type: string
+                    example: 01/01/2002
+                  subject:
+                    type: string
+                    example: I have this query on cutoff regarding MLP project
+                  category:
+                    type: string
+                    example: MLP
+                  likes:
+                    type: number
+                    example: 45
+                  isresolved:
+                    type: boolean
+                    example: true
+                  messages:
+                    type: object
+                    example:
+                      - I have the same query
+                      - I hope this helps
+        '400':
+          description: Invalid ticketid supplied
+        '404':
+          description: Ticket not found
+        default:
+          description: Default error sample response
+  /ticket/{ticketid}:
+    get:
+      tags:
+        - Ticket
+      summary: Get ticket by ticketid
+      description: ''
+      operationId: getTicketById
+      parameters:
+        - name: ticketid
+          in: path
+          description: 'The ticket that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userid:
+                    type: number
+                    example: 1
+                  ticketid:
+                    type: number
+                    example: 3
+                  created_date:
+                    type: string
+                    example: 01/01/2002
+                  subject:
+                    type: string
+                    example: I have this query on cutoff regarding MLP project
+                  category:
+                    type: string
+                    example: MLP
+                  likes:
+                    type: number
+                    example: 45
+                  isresolved:
+                    type: boolean
+                    example: true
+                  messages:
+                    type: object
+                    example:
+                      - I have the same query
+                      - I hope this helps
+        '400':
+          description: Invalid ticketid supplied
+        '404':
+          description: Ticket not found
+    put:
+      tags:
+        - Ticket
+      summary: Updates a ticket with new message or resolve status
+      description: ''
+      operationId: updateTicket
+      parameters:
+        - name: ticketid
+          in: path
+          description: ID of ticket that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: userid
+          in: query
+          description: User id
+          schema:
+            type: string
+        - name: message
+          in: query
+          description: Message replies to a ticket
+          schema:
+            type: string
+        - name: isresolved
+          in: query
+          description: Status of ticket that needs to be updated
+          schema:
+            type: boolean
+        - name: likes
+          in: query
+          description: Number of likes that needs to be updated
+          schema:
+            type: number
+      responses:
+        '405':
+          description: Invalid input
+  /faq/{ticketid}:
+    description: FAQ items
+    put:
+      tags:
+        - Faq
+      summary: ''
+      description: Adds to the FAQ
+      operationId: addFaq
+      parameters:
+        - name: ticketid
+          in: path
+          description: ID of ticket that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: userid
+          in: query
+          description: User id
+          schema:
+            type: string
+        - name: isresolved
+          in: query
+          description: Status of ticket that needs to be updated
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userid:
+                    type: number
+                    example: 1
+                  ticketid:
+                    type: number
+                    example: 3
+                  created_date:
+                    type: string
+                    example: 01/01/2002
+                  subject:
+                    type: string
+                    example: I have this query on cutoff regarding MLP project
+                  category:
+                    type: string
+                    example: MLP
+                  likes:
+                    type: number
+                    example: 45
+                  isresolved:
+                    type: boolean
+                    example: true
+                  messages:
+                    type: object
+                    example:
+                      - I have the same query
+                      - I hope this helps
+        '400':
+          description: Invalid Ticket supplied
+        '404':
+          description: FAQ not found
+    delete:
+      tags:
+        - Faq
+      summary: Delete ticket
+      description: This can only be done by the logged in user.
+      operationId: deleteFaq
+      parameters:
+        - name: ticketid
+          in: path
+          description: The ticket that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid ticket supplied
+        '404':
+          description: ticket not found
+  /ticket/{category}:
+    summary: Get tickets by category
+    get:
+      tags:
+        - Ticket
+      summary: Get tickets by category
+      parameters:
+        - name: category
+          in: path
+          description: The category that needs to be searched for
+          required: true
+          schema:
+            type: string
+      description: ''
+      operationId: getCategories
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticketid:
+                    type: number
+                    example: 3
+                  created_date:
+                    type: string
+                    example: 01/01/2002
+                  subject:
+                    type: string
+                    example: I have this query on cutoff regarding MLP project
+                  category:
+                    type: string
+                    example: MLP
+        '400':
+          description: Invalid Ticket supplied
+        '404':
+          description: Category not found
+  /user/{userid}/{ticketid}:
+    summary: Access tickets for the respective users
+    post:
+      tags:
+        - User-tickets
+      summary: Creates a Ticket object
+      description: ''
+      parameters:
+        - name: userid
+          in: path
+          description: User id
+          required: true
+          schema:
+            type: integer
+        - name: ticketid
+          in: path
+          description: ID of ticket that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: subject
+          in: query
+          description: Subject of ticket that needs to be updated
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: category of pet that needs to be updated
+          schema:
+            type: string
+      operationId: createTicket
+      responses:
+        default:
+          description: Default error sample response
+    get:
+      tags:
+        - User-tickets
+      summary: Get the tickets for the respective user
+      description: ''
+      parameters:
+        - name: userid
+          in: path
+          description: The userid that needs to be searched for
+          required: true
+          schema:
+            type: string
+        - name: ticketid
+          in: path
+          description: The ticket that needs to be searched for
+          required: true
+          schema:
+            type: string
+      operationId: getUserTickets
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userid:
+                    type: number
+                    example: 3
+                  ticketid:
+                    type: number
+                    example: 3
+                  created_date:
+                    type: string
+                    example: 01/01/2002
+                  subject:
+                    type: string
+                    example: I have this query on cutoff regarding MLP project
+                  category:
+                    type: string
+                    example: MLP
+        '400':
+          description: Invalid Ticket supplied
+        '404':
+          description: Category not found
+    put:
+      tags:
+        - User-tickets
+      summary: Edit user tickets
+      description: ''
+      operationId: editUserTicket
+      parameters:
+        - name: ticketid
+          in: path
+          description: ID of ticket that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: userid
+          in: path
+          required: true
+          description: User id
+          schema:
+            type: string
+        - name: subject
+          in: query
+          description: Subject of ticket that needs to be updated
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: category of pet that needs to be updated
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userid:
+                    type: number
+                    example: 3
+                  ticketid:
+                    type: number
+                    example: 3
+                  created_date:
+                    type: string
+                    example: 01/01/2002
+                  subject:
+                    type: string
+                    example: I have this query on cutoff regarding MLP project
+                  category:
+                    type: string
+                    example: MLP
+        '400':
+          description: Invalid Ticket supplied
+        '404':
+          description: Category not found
+    delete:
+      tags:
+        - User-tickets
+      summary: Delete ticket
+      description: This can only be done by the logged in user.
+      operationId: deleteTicket
+      parameters:
+        - name: userid
+          in: path
+          description: The userid that needs to be searched for
+          required: true
+          schema:
+            type: string
+        - name: ticketid
+          in: path
+          description: The ticket that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+  /user/{userid}/{ticketid}/notification:
+    summary: Notifs for the user
+    post:
+      tags:
+        - User-tickets
+      parameters:
+        - name: userid
+          in: path
+          description: The userid that needs to be searched for
+          required: true
+          schema:
+            type: string
+        - name: ticketid
+          in: path
+          description: The ticket that needs to be searched for
+          required: true
+          schema:
+            type: string
+        - name: isresolved
+          in: query
+          description: Status of ticket that needs to be updated
+          schema:
+            type: boolean
+      summary: Send notification about status
+      description: ''
+      operationId: sendNotifs
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticketid:
+                    type: number
+                    example: 3
+                  created_date:
+                    type: string
+                    example: 01/01/2002
+                  subject:
+                    type: string
+                    example: I have this query on cutoff regarding MLP project
+                  category:
+                    type: string
+                    example: MLP
+                  message:
+                    type: string
+                    example: Your ticket has been resolved
+        '400':
+          description: Invalid Ticket supplied
+        '404':
+          description: Category not found
