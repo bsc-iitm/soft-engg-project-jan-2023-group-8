@@ -3,6 +3,7 @@ from flask import Flask
 from flask_restful import Api
 from application.db import db, db_dir
 from application.api.user_api import UserAPI, UserListAPI
+from application.api.message_api import MessageAPI, MessageListAPI
 
 # ----------------- Configurations --------------------------------
 
@@ -22,6 +23,8 @@ db.init_app(app)
 
 api.add_resource(UserAPI, '/api/user/<int:user_id>')
 api.add_resource(UserListAPI, '/api/user')
+api.add_resource(MessageListAPI, '/api/ticket/<int:ticket_id>/message')
+api.add_resource(MessageAPI, '/api/ticket/<int:ticket_id>/message/<int:message_id>')
 
 if __name__ == '__main__':
     app.run(host='localhost', port='8080', debug=True)
