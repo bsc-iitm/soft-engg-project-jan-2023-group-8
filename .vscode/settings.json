@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "SQLite",
+            "database": "${workspaceFolder:soft-engg-project-jan-2023-group-8}/src/instance/database.sqlite3"
+        }
+    ]
+}

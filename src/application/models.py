@@ -1,15 +1,28 @@
 from application.db import db
 from sqlalchemy.sql import func
+from flask_login import UserMixin
+from datetime import datetime
 
+from werkzeug.security import generate_password_hash, check_password_hash
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'User'
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    username = db.Column(db.String, nullable=False, unique=True)
+    username = db.Column(db.String, nullable=False)
     password = db.Column(db.String(30), nullable=False)
-    display_name = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
     role = db.Column(db.Integer, nullable=False)
-    
+    joined_at = db.Column(db.DateTime(), default = datetime.utcnow, index = True)
+
+    def get_id(self):
+           return (self.user_id)
+       
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self,password):
+        return check_password_hash(self.password,password)
+      
     def __repr__(self):
         return f'<User {self.username}>'
     
