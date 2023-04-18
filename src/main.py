@@ -3,6 +3,7 @@ from flask import Flask
 from flask_restful import Api
 from application.db import db, db_dir
 from application.api.user_api import UserAPI, UserListAPI
+from application.api.ticket_api import TicketAPI, TicketListAPI
 from application.api.message_api import MessageAPI, MessageListAPI
 from flask_login import LoginManager
 
@@ -26,8 +27,10 @@ app.config['timezone'] = 'Asia/Kolkata'
 db.init_app(app)
 login_manager.init_app(app)
 
-api.add_resource(UserAPI, '/api/user/<int:user_id>')
 api.add_resource(UserListAPI, '/api/user')
+api.add_resource(UserAPI, '/api/user/<int:user_id>')
+api.add_resource(TicketListAPI, '/api/user/<int:user_id>/ticket')
+api.add_resource(TicketAPI, '/api/user/<int:user_id>/ticket/<int:ticket_id>')
 api.add_resource(MessageListAPI, '/api/ticket/<int:ticket_id>/message')
 api.add_resource(MessageAPI, '/api/ticket/<int:ticket_id>/message/<int:message_id>')
 
