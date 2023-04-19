@@ -10,7 +10,7 @@ ticket_fields = {
     'ticket_id': fields.Integer, 
     'likes': fields.Integer,
     'subject': fields.String,
-    'category': fields.Integer,
+    'category': fields.String,
     'created_date': fields.DateTime,
     'is_resolved': fields.String
 }
@@ -37,11 +37,12 @@ class TicketListAPI(Resource):
             return ticket, 200
        
     @marshal_with(ticket_fields) 
-    def post(self, ticket_id): 
+    def post(self, user_id): 
         args = message_parser.parse_args()
         subject = args['subject']
-        user_id = args['user_id']
         category=args['category']
+        is_resolved = args['is_resolved']
+        likes = args['likes']
         #ticketname=args['ticketname']
         
         # Argument Handling
@@ -54,7 +55,7 @@ class TicketListAPI(Resource):
         
         
         try:
-            new_ticket = Ticket(user_id=user_id, ticket_id=ticket_id, subject=subject, category=category, created_at = datetime.now())
+            new_ticket = Ticket(user_id=user_id, subject=subject, category=category, likes=likes, is_resolved = is_resolved,created_date = datetime.now())
             db.session.add(new_ticket)
             db.session.commit()
             return new_ticket, 201
