@@ -5,6 +5,7 @@ from application.db import db, db_dir
 from application.api.user_api import UserAPI, UserListAPI
 from application.api.ticket_api import TicketAPI, TicketListAPI
 from application.api.message_api import MessageAPI, MessageListAPI
+from application.api.faq_api import FaqAPI, FaqListAPI, FaqUserListAPI
 from flask_login import LoginManager
 
 # ----------------- Configurations --------------------------------
@@ -33,6 +34,9 @@ api.add_resource(TicketListAPI, '/api/user/<int:user_id>/ticket')
 api.add_resource(TicketAPI, '/api/user/<int:user_id>/ticket/<int:ticket_id>')
 api.add_resource(MessageListAPI, '/api/ticket/<int:ticket_id>/message')
 api.add_resource(MessageAPI, '/api/ticket/<int:ticket_id>/message/<int:message_id>')
+api.add_resource(FaqListAPI, '/api/faq')
+api.add_resource(FaqAPI, '/api/faq/ticket/<int:ticket_id>')
+api.add_resource(FaqUserListAPI, '/api/faq/user/<int:user_id>')
 
 from application.controllers.app import *
 from application.controllers.auth import *

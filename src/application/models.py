@@ -33,7 +33,7 @@ class Ticket(db.Model):
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
     is_resolved = db.Column(db.String, nullable=False)
     subject = db.Column(db.String, nullable=False)
-    catagory = db.Column(db.String, nullable=False)
+    category = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
     
     def __repr__(self):
