@@ -10,7 +10,7 @@ user_fields = {
     'username': fields.String,
     'email': fields.String,
     'role': fields.Integer,
-    'joined_at':fields.String
+    'joined_at':fields.DateTime
 }
 
 message_parser = reqparse.RequestParser()
@@ -34,10 +34,10 @@ class UserListAPI(Resource):
             return user, 200
        
     @marshal_with(user_fields) 
-    def post(self, user_id): 
+    def post(self): 
         args = message_parser.parse_args()
         email = args['email']
-        #password = args['password']
+        password = args['password']
         role=args['role']
         username=args['username']
         
@@ -48,15 +48,17 @@ class UserListAPI(Resource):
             raise Error(message = 'email is required.', status_code=400)
         if username is None or username == '':
             raise Error(message = 'username is required.', status_code=400)
+        if password is None or password == '':
+            raise Error(message = 'password is required.', status_code=400)
         
         
         try:
-            new_user = User(user_id=user_id, username=username, email=email, joined_at = datetime.now())
+            new_user = User(username=username, password=password, email=email, role=role, joined_at = datetime.now())
             db.session.add(new_user)
             db.session.commit()
             return new_user, 201
         except:
-            raise Error(message="Cannot create message", status_code=409)    
+            raise Error(message="Cannot create User", status_code=409)    
 
 class UserAPI(Resource):
     @marshal_with(user_fields)
