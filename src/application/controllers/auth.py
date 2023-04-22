@@ -34,7 +34,7 @@ def login():
         if user is not None and user.check_password(form.password.data):
             login_user(user)
             next = request.args.get("next")
-            return redirect(next or url_for('home'))
+            return redirect(next or url_for('dashboard'))
         flash('Invalid email address or Password.')    
     return render_template('login.html', form=form)
 

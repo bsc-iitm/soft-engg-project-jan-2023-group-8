@@ -1,22 +1,30 @@
 {% extends 'template.html' %}
 {% block head %}
-    {{user}}'s Dashboard
+    {{user.username}}'s Dashboard
 {% endblock %}
 
 {% block body %}
 <br>
 <body class="text-center">
     <div class="container">
-        <h3> Welcome {{user}}!</h3>
+        <h3> Welcome {{user.username}}!</h3>
     </div><br>
-    <button class="btn btn-lg btn-primary"><a style="color:white" href="{{url_for('add_ticket')}}">Create Ticket</a></button>
+    {% if user.role == 1 %}
+        <button class="btn btn-lg btn-primary"><a style="color:white" href="{{url_for('add_ticket')}}">Create ticket</a></button>
+    {% elif user.role == 2 %}
+        # Select tag to choose tickets
+        <button class="btn btn-lg btn-primary"><a style="color:white" href="{{url_for('mark_ticket')}}">Mark/Unmark a ticket</a></button>
+    {% else %}
+        # Select tag to choose resolved tickets
+        <button class="btn btn-lg btn-primary"><a style="color:white" href="{{url_for('move_ticket')}}">Move ticket to FAQ</a></button>
+    {% endif %}
     </div><br><br>
     <div>
               <table class="table table-hover table-dark">
         <thead>
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Message</th>
+                <th scope="col">Ticket ID</th>
+                <th scope="col">Title</th>
                 <th scope="col">Category</th>
                 <th scope="col">Ticket Resolved?</th>
             </tr>

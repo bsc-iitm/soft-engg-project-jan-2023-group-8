@@ -63,8 +63,17 @@ class Notification(db.Model):
 
 class Faq(db.Model):
     __tablename__ = 'Faq'
-    ticket_id = db.Column(db.Integer, primary_key=True, autoincrement=True) 
+    ticket_id = db.Column(db.Integer, primary_key=True) 
     user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
     
     def __repr__(self):
         return f'<FAQ {self.ticket_id}>'
+    
+    
+class ResolvedUser(db.Model):
+    __tablename__ = 'ResolvedUser'
+    ticket_id = db.Column(db.Integer, primary_key=True) 
+    user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
+    
+    def __repr__(self):
+        return f'<Resolved User {self.ticket_id} {self.user_id}>'
