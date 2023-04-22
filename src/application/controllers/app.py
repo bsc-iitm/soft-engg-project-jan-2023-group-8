@@ -1,6 +1,6 @@
 from main import app
 from flask_login import login_required
-from application.models import User,Ticket,Message, ResolvedUser
+from application.models import User,Ticket,Faq, ResolvedUser, Notification
 from main import login_manager, app
 from application.db import db
 from flask import render_template,redirect, url_for,request
@@ -63,4 +63,31 @@ def delete_ticket(ticket_id):
 
 # ------------------------------------- FAQ Conroller -----------------------
 
+@app.route("/faq", methods=['GET'])
+@login_required
+def view_faq():
+    tickets_faq = Ticket.query.join(Faq, Faq.ticket_id == Ticket.ticket_id).order_by(Ticket.likes.desc()).all()
+    return render_template('view_faq.html', tickets=tickets_faq)
+
+@app.route("/faq/detele/<int:ticket_id>", methods=['GET'])
+@login_required
+def remove_ticket_faq(ticket_id):
+    faq = Faq.query.filter_by(ticket_id=ticket_id).one()
+    db.session.delete(faq)
+    db.session.commit()
+    tickets_faq = Ticket.query.join(Faq, Faq.ticket_id == Ticket.ticket_id).order_by(Ticket.likes.desc()).all()
+    return render_template('view_faq.html', tickets=tickets_faq)
+
 # ------------------------------------  Notification Controller -------------
+
+# While ticket of the student being resovled by support staff.
+def notify_student(ticket_id, user_id):
+    notify = Notification(ticket_id, f"Ticket ID: {ticket_id} has been resolved.", user_id, created_date=datetime.now())
+    db.session.add(notify)
+    db.session.commit()
+    
+# While student replys to closed ticket.
+def notify_staff(ticket_id, user_id): 
+    notify = Notification(ticket_id, f"Ticket ID: {ticket_id} has been reopened.", user_id, created_date=datetime.now())
+    db.session.add(notify)
+    db.session.commit()
