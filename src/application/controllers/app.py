@@ -91,3 +91,8 @@ def notify_staff(ticket_id, user_id):
     notify = Notification(ticket_id, f"Ticket ID: {ticket_id} has been reopened.", user_id, created_date=datetime.now())
     db.session.add(notify)
     db.session.commit()
+    
+# Called in dashboard to display all notifications of a user
+def get_notifications(user_id): 
+    notifications = Notification.query.filter_by(user_id = user_id).order_by(Notification.created_date.desc()).all()
+    return notifications
