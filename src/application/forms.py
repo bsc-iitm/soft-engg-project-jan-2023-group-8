@@ -14,7 +14,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
-    
+
 class TicketForm(FlaskForm):
     subject = StringField(label='Subject', validators=[DataRequired()])
     category=StringField(label='Category',validators=[DataRequired()])
@@ -24,6 +24,15 @@ class EditTicket(FlaskForm):
     new_subject = StringField(label='Enter New Subject', validators=[DataRequired()])
     new_category = StringField(label='Change Category?', validators=[DataRequired()])
     edit = SubmitField(label='Edit Ticket')
+
+class MessageForm(FlaskForm):
+    content = StringField(label='Enter Reply Message', validators=[DataRequired()])
+    submit = SubmitField(label='Add Message')
+
+class EditMessage(FlaskForm):
+    new_content = StringField(label='Enter New Question', validators=[DataRequired()])
+    edit = SubmitField(label='Edit')
+
 
 class DeleteForm(FlaskForm):
     delete = SubmitField(label='Delete')
