@@ -16,6 +16,15 @@
       {{ error }}
    </div>
 {% endfor %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-danger" role="alert">
+         {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
   <div class="d-flex align-items-center justify-items-center">
     <div class="container w-50 p-3 my-3 bg-dark text-white border border-dark rounded">
     <h1 class="p-4 text-center">Register</h1>

@@ -17,12 +17,16 @@ from application.forms import RegistrationForm
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username =form.username.data, email = form.email.data)
-        user.set_password(form.password.data)
-        user.role = form.role.data
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('login'))
+        try:   
+            user = User(username =form.username.data, email = form.email.data)
+            user.set_password(form.password.data)
+            user.role = form.role.data
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('login'))
+        except: 
+            flash("Account with this mail ID already exist. Please Log in.")
+            return redirect(url_for('register'))
     return render_template('registration.html', form=form)
 
 
