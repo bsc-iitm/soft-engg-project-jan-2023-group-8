@@ -1,7 +1,7 @@
 from main import app
 from flask import render_template,flash
 from flask_login import login_required
-from application.models import User, Ticket, Message, Faq, Notification
+from application.models import User, Ticket, Message, Faq, Notification, ResolvedUser
 from flask import render_template,flash
 from main import login_manager, app
 from application.db import db
@@ -88,7 +88,7 @@ def view_ticket(ticket_id):
             return redirect(url_for('view_ticket',ticket_id=ticket_id))
     
     if request.method == "GET":
-        return render_template('ticket.html',item=ticket,message=message,user=current_user.username,form=form)
+        return render_template('ticket.html',item=ticket,message=message,user=current_user,form=form)
 
 
 @app.route("/delete/<int:ticket_id>", methods=['GET', 'DELETE'])
@@ -101,20 +101,25 @@ def delete_ticket(ticket_id):
 
 # ------------------------------------- Staff Ticket endpoint -----------------------
 
-# @app.route("/markticket/<int:ticket_id>", methods=['GET', 'POST'])
-# def mark_ticket(ticket_id):
-#     form = MessageForm()
+@app.route("/markticket/<int:ticket_id>", methods=['GET', 'POST'])
+def mark_ticket(ticket_id):
+    form = MessageForm()
 
-#     if form.validate_on_submit():
-#         message_to_create = Message(user_id=current_user.user_id, ticket_id=ticket_id, content=form.content.data, created_date = datetime.now())
-#         db.session.add(message_to_create)
-#         ticket = Ticket.query.filter_by(ticket_id=ticket_id).one()
-#         ticket.response=message_to_create.content
-#         ticket.is_resolved=True
-#         db.session.commit()
-#         return redirect(url_for('view_ticket',ticket_id=ticket_id))
+    if form.validate_on_submit():
+        message_to_create = Message(user_id=current_user.user_id, ticket_id=ticket_id, content=form.content.data, created_date = datetime.now())
+        ticket = Ticket.query.filter_by(ticket_id=ticket_id).one()
+        resolved_user = ResolvedUser(user_id = current_user.user_id, ticket_id = ticket_id)
+        ticket.is_resolved="Y"
+       
+        db.session.add(message_to_create)
+        db.session.add(ticket)
+        db.sessin.add(resolved_user)
+        db.session.commit()
+        notify_student(ticket.ticket_id, ticket.user_id)
+       
+        return redirect(url_for('view_ticket',ticket_id=ticket_id))
 
-#     return render_template('add_message.html', form=form)
+    return render_template('add_message.html', form=form)
 
 # ------------------------------------- Message Conroller -----------------------
 
@@ -124,8 +129,14 @@ def add_message(ticket_id):
     form = MessageForm()
 
     if form.validate_on_submit():
+        ticket = Ticket.query.filter_by(ticket_id = ticket_id).one()
+        if ticket.is_resolved == "Y": 
+            resolved_user = ResolvedUser.query.filter_by(ticket_id=ticket_id).one()
+            notify_staff(ticket_id, resolved_user.user_id)
+            ticket.is_resolved = "N" 
         message_to_create = Message(user_id=current_user.user_id, ticket_id=ticket_id, content=form.content.data, created_date = datetime.now())
         db.session.add(message_to_create)
+        db.session.add(ticket)
         db.session.commit()
         return redirect(url_for('view_ticket',ticket_id=ticket_id))
     return render_template('add_message.html', form=form)

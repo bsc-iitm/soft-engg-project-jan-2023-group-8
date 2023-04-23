@@ -32,7 +32,11 @@
                     <td>{{ item.ticket_id }}</td>
                     <td>{{ item.subject }}</td> 
                     <td>{{ item.category }}</td>
-                    <td>{{item.is_resolved}}</td>
+                    {% if item.is_resolved == "Y" %}
+                        <td>Yes</td>
+                    {% else %}
+                        <td>No</td>
+                    {% endif %}
                     <td>
                         <button class="btn btn-outline btn-info"><a style="color:white" href="/ticket/{{item.ticket_id}}">View Info</a></button>
                         <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Modal-Edit-{{ item.ticket_id }}">Edit Ticket</button>

@@ -31,7 +31,7 @@ class Ticket(db.Model):
     ticket_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     likes = db.Column(db.Integer, nullable=False, default=0)
     created_date = db.Column(db.DateTime(timezone=True), server_default=func.now(), nullable=False)
-    is_resolved = db.Column(db.String, nullable=False)
+    is_resolved = db.Column(db.String, nullable=False, default="N")
     subject = db.Column(db.String, nullable=False)
     category = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
