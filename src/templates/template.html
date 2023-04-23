@@ -14,7 +14,7 @@
    </head>
    <body>
       <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="{{url_for('home')}}">
           {% block head %}
 
           {% endblock %}
@@ -25,10 +25,25 @@
       <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{url_for('dashboard')}}">Dashboard <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#"></a>
+                <div class="btn-group pull-right top-head-dropdown">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:white">
+                        🔔 <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                      <li>
+                        <a href="#" class="top-text-block">
+                          <div class="top-text-heading">
+                            {% block notif %}
+
+                            {% endblock %}
+                          </div>
+                        </a> 
+                      </li>
+                    </ul>
+                </div>
             </li>
           </ul>
           <ul class="navbar-nav">
@@ -36,7 +51,7 @@
                     <a class="nav-link" href="/logout">Logout</a>
               </li>
               <li class="nav-item">
-                    <a class="nav-link" href="#">FAQ</a>
+                    <a class="nav-link" href="{{url_for('view_faq')}}">FAQ</a>
               </li>
           </ul>
       </div>
