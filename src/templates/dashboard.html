@@ -1,30 +1,26 @@
 {% extends 'template.html' %}
 {% block head %}
-    {{user.username}}'s Dashboard
+    {{user}}'s Dashboard
 {% endblock %}
-
+{% block notif %}
+    {% for notif in notifs %}
+        {{notif}}
+    {% endfor %}
+{% endblock %}
 {% block body %}
 <br>
 <body class="text-center">
     <div class="container">
-        <h3> Welcome {{user.username}}!</h3>
+        <h3> {{user}}'s Tickets </h3>
     </div><br>
-    {% if user.role == 1 %}
-        <button class="btn btn-lg btn-primary"><a style="color:white" href="{{url_for('add_ticket')}}">Create ticket</a></button>
-    {% elif user.role == 2 %}
-        # Select tag to choose tickets
-        <button class="btn btn-lg btn-primary"><a style="color:white" href="{{url_for('mark_ticket')}}">Mark/Unmark a ticket</a></button>
-    {% else %}
-        # Select tag to choose resolved tickets
-        <button class="btn btn-lg btn-primary"><a style="color:white" href="{{url_for('move_ticket')}}">Move ticket to FAQ</a></button>
-    {% endif %}
+    <button class="btn btn-lg btn-primary"><a style="color:white" href="{{url_for('add_ticket')}}">Create Ticket</a></button>
     </div><br><br>
     <div>
               <table class="table table-hover table-dark">
         <thead>
             <tr>
-                <th scope="col">Ticket ID</th>
-                <th scope="col">Title</th>
+                <th scope="col">ID</th>
+                <th scope="col">Message</th>
                 <th scope="col">Category</th>
                 <th scope="col">Ticket Resolved?</th>
             </tr>
@@ -38,7 +34,7 @@
                     <td>{{ item.category }}</td>
                     <td>{{item.is_resolved}}</td>
                     <td>
-                        <button class="btn btn-outline btn-info"><a style="color:white" href="/ticket/{{item.ticket_id}}">Select</a></button>
+                        <button class="btn btn-outline btn-info"><a style="color:white" href="/ticket/{{item.ticket_id}}">View Info</a></button>
                         <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Modal-Edit-{{ item.ticket_id }}">Edit Ticket</button>
                         <button class="btn btn-outline btn-success"><a style="color:white" href="/delete/{{item.ticket_id}}">Delete Ticket</a></button>
                     </td>
