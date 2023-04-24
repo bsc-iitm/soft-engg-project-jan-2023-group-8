@@ -17,6 +17,7 @@ def home():
     tickets = Ticket.query.all()
     form = MessageForm()
     notifs=get_notifications(current_user.user_id)
+    
     if request.method == "POST":
         if form.validate_on_submit():
             p_item = request.form.get('add_message')
@@ -114,7 +115,7 @@ def mark_ticket(ticket_id):
        
         db.session.add(message_to_create)
         db.session.add(ticket)
-        db.sessin.add(resolved_user)
+        db.session.add(resolved_user)
         db.session.commit()
         notify_student(ticket.ticket_id, ticket.user_id)
        
@@ -176,7 +177,6 @@ def view_faq():
 @login_required
 def add_faq(ticket_id):
     tickets_faq = Ticket.query.join(Faq, Faq.ticket_id == Ticket.ticket_id).order_by(Ticket.likes.desc()).all()
-    
     if(Faq.query.filter_by(ticket_id=ticket_id).one() == None):
         ticket_to_add = Faq(user_id=current_user.user_id, ticket_id=ticket_id)
         db.session.add(ticket_to_add)
@@ -185,7 +185,7 @@ def add_faq(ticket_id):
     else:
         flash("Ticket already in FAQ")
     return render_template('view_faq.html', items=tickets_faq,user=current_user.username)
-
+    
 @app.route("/faq/delete/<int:ticket_id>", methods=['GET'])
 @login_required
 def remove_ticket_faq(ticket_id):
@@ -200,13 +200,13 @@ def remove_ticket_faq(ticket_id):
 
 # While ticket of the student being resovled by support staff.
 def notify_student(ticket_id, user_id):
-    notify = Notification(ticket_id, f"Ticket ID: {ticket_id} has been resolved.", user_id, created_date=datetime.now())
+    notify = Notification(ticket_id=ticket_id, message=f"Ticket ID: {ticket_id} has been resolved.",user_id= user_id, created_date=datetime.now())
     db.session.add(notify)
     db.session.commit()
     
 # While student replys to closed ticket.
 def notify_staff(ticket_id, user_id): 
-    notify = Notification(ticket_id, f"Ticket ID: {ticket_id} has been reopened.", user_id, created_date=datetime.now())
+    notify = Notification(ticket_id=ticket_id, message=f"Ticket ID: {ticket_id} has been reopened.",user_id= user_id, created_date=datetime.now())
     db.session.add(notify)
     db.session.commit()
     
