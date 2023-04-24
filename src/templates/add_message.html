@@ -1,0 +1,23 @@
+{% extends 'template.html' %}
+{% block head %}
+    Create New Message
+{% endblock %}
+
+{% block body %}
+<body class="text-center">
+    <div class="container">
+        <form method="POST" class="form-register" style="color:white">
+            {{ form.hidden_tag() }}
+            <br>
+            <h1 class="h3 mb-3 font-weight-normal">
+                Add Message
+            </h1>
+            <br>
+            {{ form.content.label() }}
+            {{ form.content(class="form-control", placeholder="Message") }}
+            <br><br>
+            {{ form.submit(class="btn btn-lg btn-primary") }}
+        </form>
+    </div>
+</body>
+{% endblock %}
