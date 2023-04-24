@@ -76,15 +76,16 @@ def view_ticket(ticket_id):
     form = EditMessage()
 
     if request.method == "POST":
-        #if(message.user_id==current_user.user_id):
+        p_user=request.form.get('user_message')
+        if(p_user==current_user.user_id):
             p_item = request.form.get('add_message')
             p_item_o = Message.query.filter_by(message_id=p_item).first()
             if p_item_o:
                 p_item_o.content = form.new_content.data
                 db.session.commit()
         
-        #else:
-            #flash("You cannot delete this message")
+        else:
+            flash("You cannot Edit this message")
             return redirect(url_for('view_ticket',ticket_id=ticket_id))
     
     if request.method == "GET":
@@ -146,11 +147,11 @@ def add_message(ticket_id):
 def delete_message(message_id):
     message = Message.query.filter_by(message_id=message_id).one()
     ticket_id=message.ticket_id
-    #if(message.user_id==current_user.user_id):
-    db.session.delete(message)
-    db.session.commit()
-    #else:
-        #flash("You cannot delete this message")       
+    if(message.user_id==current_user.user_id):
+        db.session.delete(message)
+        db.session.commit()
+    else:
+        flash("You cannot delete this message")       
     return redirect(url_for('view_ticket',ticket_id=ticket_id))
 
 # ------------------------------------- Likes Conroller -----------------------
