@@ -174,14 +174,16 @@ def view_faq():
 @app.route("/addfaq/<int:ticket_id>", methods=['GET'])
 @login_required
 def add_faq(ticket_id):
-    
-    ticket_to_add = Faq(user_id=current_user.user_id, ticket_id=ticket_id)
-    db.session.add(ticket_to_add)
-    db.session.commit()
-    
     tickets_faq = Ticket.query.join(Faq, Faq.ticket_id == Ticket.ticket_id).order_by(Ticket.likes.desc()).all()
+    
+    if(Faq.query.filter_by(ticket_id=ticket_id).one() == None):
+        ticket_to_add = Faq(user_id=current_user.user_id, ticket_id=ticket_id)
+        db.session.add(ticket_to_add)
+        db.session.commit()       
+        
+    else:
+        flash("Ticket already in FAQ")
     return render_template('view_faq.html', items=tickets_faq,user=current_user.username)
-
 
 @app.route("/faq/delete/<int:ticket_id>", methods=['GET'])
 @login_required
