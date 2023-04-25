@@ -1,0 +1,41 @@
+{% extends 'template.html' %}
+{% block head %}
+    {{user}}'s FAQ Page
+{% endblock %}
+
+{% block body %}
+<br>
+<body class="text-center">
+    <div class="container">
+        <h3> FAQ's by your Peers </h3>
+    </div><br>
+    </div><br><br>
+    <div>
+              <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Category</th>
+                <th scope="col">Staff Response</th>
+                <th scope="col">Date Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.ticket_id }}</td>
+                    <td>{{ item.subject }}</td> 
+                    <td>{{ item.category }}</td>
+                    <td>{{item.is_resolved}}</td>
+                    <td>{{item.created_date}}</td>
+                    <td>
+                        <button class="btn btn-outline btn-success"><a style="color:white" href="/faq/delete/{{item.ticket_id}}">Delete</a></button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</body>
+{% endblock %}

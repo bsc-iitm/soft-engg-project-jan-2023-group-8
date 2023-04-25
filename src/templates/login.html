@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for error in form.password.errors %}
+   <div class="alert alert-danger" role="alert">
+      {{ error }}
+   </div>
+{% endfor %}
+{% for error in form.email.errors %}
+   <div class="alert alert-danger" role="alert">
+      {{ error }}
+   </div>
+{% endfor %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-danger" role="alert">
+         {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+<div class="d-flex align-items-center justify-items-center">
+  <div class="container w-50 p-3 my-3 bg-dark text-white border border-dark rounded">
+    <h1 class="p-4 text-center">Login</h1>
+    <div class="d-flex p-2 justify-content-center">
+      <form action="" method="POST">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            <label>Email</label>
+            {{ form.email(class="form-control", placeholder="Enter email") }}
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            {{ form.password(class="form-control", placeholder="Enter password") }}
+          </div>
+          <div class="form-group">
+            {{ form.remember() }} {{ form.remember.label }}
+          </div>
+          <div class="text-center">
+            <button class="btn btn-light">LOGIN</button>
+          </div>
+      </form>
+    </div>   
+    <div>
+      <p class="mb-0 pt-3 text-center pt-5">Don't have an account? <a href="/register" class="text-white-50 fw-bold">Sign Up</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

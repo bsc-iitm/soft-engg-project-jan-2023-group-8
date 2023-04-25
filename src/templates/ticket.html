@@ -1,0 +1,52 @@
+{% extends 'template.html' %}
+{% block head %}
+    {{user.username}}'s Dashboard
+{% endblock %}
+
+{% block body %}
+<br>
+<body class="text-center">
+    <div class="container">
+        <h3> {{item.subject}}</h3>
+        
+    </div><br>
+    {% if user.role == 1 %}
+        <button class="btn btn-lg btn-primary"><a style="color:white" href="/addmessage/{{item.ticket_id}}">Add Message</a></button>
+    {% elif user.role == 2 %}
+        # Select tag to choose tickets
+        <button class="btn btn-lg btn-primary"><a style="color:white" href="/markticket/{{item.ticket_id}}">Mark/Unmark a ticket</a></button>
+    {% else %}
+        # Select tag to choose resolved tickets
+        <button class="btn btn-lg btn-primary"><a style="color:white" href="/addfaq/{{item.ticket_id}}">Move ticket to FAQ</a></button>
+    {% endif %}
+    </div><br><br>
+    </div><br><br>
+    <div>
+              <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">User</th>
+                <th scope="col">Content</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for msg in message %}
+            {% include 'includes/message_modal.html' %}
+                <tr>
+                    <td>{{ msg.message_id }}</td>
+                    <td>{{ msg.user_id }}</td> 
+                    <td>{{ msg.content }}</td>
+                    <td>{{ msg.created_date}}</td>
+                    <td>
+                        <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Message-Edit-{{msg.message_id}}">Edit Messsage</button>
+                        <button class="btn btn-outline btn-success"><a style="color:white" href="/deletemsg/{{msg.message_id}}">Delete Message</a></button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</body>
+{% endblock %}
